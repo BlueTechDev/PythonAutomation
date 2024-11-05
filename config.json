@@ -15,5 +15,11 @@
         "Applications": [".dmg", ".exe", ".pkg"],
         "Scripts": [".py", ".js", ".sh", ".bat"]
     },
-    "days_old_for_archive": 30
+    "days_old_for_archive": 30,
+    "sorting_rules": {
+        "Finance": ["invoice", "tax", "statement"],
+        "Projects": ["project_", "proposal"],
+        "Personal": ["photo_", "vacation", "family"]
+    }
 }
+

@@ -39,10 +39,16 @@ def organize_files(directory):
         if os.path.isdir(file_path) or file_name.startswith('.'):
             continue
 
-        file_extension = os.path.splitext(file_name)[1]
-        category = get_file_category(file_extension)
-        
-        target_folder = os.path.join(directory, category)
+        # Check custom sorting rules
+        for category, keywords in config.get("sorting_rules", {}).items():
+            if any(keyword.lower() in file_name.lower() for keyword in keywords):
+                target_folder = os.path.join(directory, category)
+                break
+        else:
+            file_extension = os.path.splitext(file_name)[1]
+            category = get_file_category(file_extension)
+            target_folder = os.path.join(directory, category)
+
         os.makedirs(target_folder, exist_ok=True)
         
         target_path = os.path.join(target_folder, file_name)
@@ -58,6 +64,7 @@ def organize_files(directory):
 
     print(f"Total files moved in {directory}: {files_moved}")
     return files_moved
+
 
 # Helper function to categorize file types
 def get_file_category(file_extension):
@@ -142,6 +149,105 @@ def organize_screenshots():
     print(f"Total screenshots moved: {screenshots_moved}")
     return screenshots_moved
 
+def organize_screenshots():
+    """
+    Organizes screenshots on the desktop into categorized folders based on keywords
+    or into date-based folders (e.g., October_2024) by default.
+    """
+    print("Organizing screenshots by project or date...")
+    
+    # Define project keywords and their target subfolders
+    project_keywords = {
+        "Meeting": ["meeting", "call", "discussion"],
+        "Presentation": ["presentation", "slide", "ppt"],
+        "Design": ["design", "mockup", "sketch"]
+    }
+
+    # Create a month-based folder for default organization
+    month_folder = datetime.now().strftime("%B_%Y")
+    target_month_dir = os.path.join(SCREENSHOTS_DIR, month_folder)
+    os.makedirs(target_month_dir, exist_ok=True)
+
+    screenshots_moved = 0
+
+    for file_name in os.listdir(DESKTOP_DIR):
+        file_path = os.path.join(DESKTOP_DIR, file_name)
+
+        # Check if the file is a screenshot
+        if os.path.isdir(file_path) or not file_name.lower().startswith("screenshot"):
+            continue
+
+        # Determine the target folder based on project keywords
+        for project, keywords in project_keywords.items():
+            if any(keyword.lower() in file_name.lower() for keyword in keywords):
+                target_folder = os.path.join(SCREENSHOTS_DIR, project)
+                os.makedirs(target_folder, exist_ok=True)
+                target_path = target_folder
+                break
+        else:
+            # Default to month-based folder if no keyword matches
+            target_path = target_month_dir
+
+        # Create the full path for the new file location
+        target_file_path = os.path.join(target_path, file_name)
+
+        # Handle duplicate filenames by appending a timestamp
+        if os.path.exists(target_file_path):
+            base, ext = os.path.splitext(file_name)
+            timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+            target_file_path = os.path.join(target_path, f"{base}_{timestamp}{ext}")
+
+        # Move the file
+        shutil.move(file_path, target_file_path)
+        screenshots_moved += 1
+        print(f"Moved Screenshot: {file_name} -> {target_path}")
+
+    print(f"Total screenshots moved: {screenshots_moved}")
+
+def clean_recents(directory, days_old=7, target_folder="Archived_Recents"):
+    """
+    Cleans up files in the specified directory that haven't been accessed in a given number of days.
+    Moves them to a specified target folder.
+
+    Parameters:
+    - directory (str): The directory to clean up.
+    - days_old (int): The age in days for files to be moved.
+    - target_folder (str): The name of the folder where files will be moved.
+    """
+    print(f"Cleaning up recents in {directory} (files older than {days_old} days)...")
+    now = datetime.now()
+    files_moved = 0
+
+    # Create the target directory within the given directory
+    target_path = os.path.join(directory, target_folder)
+    os.makedirs(target_path, exist_ok=True)
+
+    for file_name in os.listdir(directory):
+        file_path = os.path.join(directory, file_name)
+        
+        if os.path.isdir(file_path) or file_name.startswith('.'):
+            continue
+        
+        # Check last access time
+        file_access_time = datetime.fromtimestamp(os.path.getatime(file_path))
+        if now - file_access_time > timedelta(days=days_old):
+            target_file_path = os.path.join(target_path, file_name)
+
+            # Handle duplicate filenames by appending a timestamp
+            if os.path.exists(target_file_path):
+                base, ext = os.path.splitext(file_name)
+                timestamp = file_access_time.strftime("%Y%m%d")
+                target_file_path = os.path.join(target_path, f"{base}_{timestamp}{ext}")
+
+            # Move the file
+            shutil.move(file_path, target_file_path)
+            files_moved += 1
+            print(f"Moved: {file_name} -> {target_path}")
+
+    print(f"Recents cleanup complete. Total files moved: {files_moved}")
+
+
+
 # Start monitoring Downloads for real-time file organization
 if __name__ == "__main__":
     print("Starting file organizer...")
@@ -160,6 +266,9 @@ if __name__ == "__main__":
         log_summary(total_files_moved, total_files_archived)
     else:
         total_files_archived = 0
+
+    # Clean up recents in the Downloads folder (or specify another folder)
+    clean_recents(DOWNLOADS_DIR, days_old=3)
 
     # Monitor Downloads folder for real-time organization
     event_handler = DownloadEventHandler()

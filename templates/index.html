@@ -9,15 +9,30 @@
 <body>
     <div class="container">
         <h1>File Management Dashboard</h1>
+        <div class="overview">
+            <div class="stat">
+                <h3>Files Moved</h3>
+                <p>{{ summary_stats['total_files_moved'] }}</p>
+            </div>
+            <div class="stat">
+                <h3>Files Archived</h3>
+                <p>{{ summary_stats['total_files_archived'] }}</p>
+            </div>
+            <div class="stat">
+                <h3>Screenshots Organized</h3>
+                <p>{{ summary_stats['total_screenshots_organized'] }}</p>
+            </div>
+        </div>
         <div class="button-group">
             <form action="/organize" method="post">
-                <button type="submit">Organize Files</button>
+                <button type="submit" class="btn">Organize Files</button>
             </form>
             <form action="/archive" method="post">
-                <button type="submit">Archive Old Files</button>
+                <button type="submit" class="btn">Archive Old Files</button>
             </form>
-            <a href="/log"><button>View Logs</button></a>
-            <a href="/schedule"><button>View Schedule</button></a>
+            <form action="/screenshots" method="post">
+                <button type="submit" class="btn">Organize Screenshots</button>
+            </form>
         </div>
     </div>
 </body>

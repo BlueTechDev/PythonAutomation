@@ -1,14 +1,14 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
+    font-family: 'Arial', sans-serif;
+    background-color: #f8f9fa;
     margin: 0;
     padding: 20px;
 }
 
 .container {
-    max-width: 800px;
-    margin: 0 auto;
-    background: #fff;
+    max-width: 900px;
+    margin: auto;
+    background: #ffffff;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -19,15 +19,45 @@ h1 {
     color: #333;
 }
 
-.button-group {
+.overview {
     display: flex;
     justify-content: space-around;
-    margin-top: 20px;
+    margin: 20px 0;
 }
 
-button {
+.stat {
+    background-color: #f1f1f1;
+    padding: 15px;
+    border-radius: 5px;
+    width: 30%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.stat i {
+    font-size: 2rem;
+    color: #007BFF;
+}
+
+.stat h3 {
+    margin-top: 10px;
+    color: #007BFF;
+}
+
+.stat p {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+}
+
+.btn {
     background-color: #007BFF;
-    color: #fff;
+    color: white;
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
@@ -35,15 +65,12 @@ button {
     transition: background-color 0.3s;
 }
 
-button:hover {
+.btn:hover {
     background-color: #0056b3;
 }
 
-pre {
-    text-align: left;
-    background: #f9f9f9;
-    padding: 15px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    overflow: auto;
+input[type="text"] {
+    padding: 5px;
+    width: 200px;
+    margin-right: 10px;
 }
