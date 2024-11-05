@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Management Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>File Management Dashboard</h1>
+        <div class="button-group">
+            <form action="/organize" method="post">
+                <button type="submit">Organize Files</button>
+            </form>
+            <form action="/archive" method="post">
+                <button type="submit">Archive Old Files</button>
+            </form>
+            <a href="/log"><button>View Logs</button></a>
+            <a href="/schedule"><button>View Schedule</button></a>
+        </div>
+    </div>
+</body>
+</html>

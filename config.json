@@ -1,0 +1,19 @@
+{
+    "directories": {
+        "desktop": "~/Desktop",
+        "downloads": "~/Downloads",
+        "screenshots": "~/Desktop/Screenshots",
+        "archive": "~/Downloads/Archive"
+    },
+    "folders": {
+        "Documents": [".pdf", ".doc", ".docx", ".txt", ".xls", ".xlsx"],
+        "Presentations": [".ppt", ".pptx"],
+        "Images": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".svg"],
+        "Videos": [".mp4", ".mov", ".avi", ".mkv", ".flv"],
+        "Audio": [".mp3", ".wav", ".aac", ".flac"],
+        "Archives": [".zip", ".rar", ".tar", ".gz", ".7z"],
+        "Applications": [".dmg", ".exe", ".pkg"],
+        "Scripts": [".py", ".js", ".sh", ".bat"]
+    },
+    "days_old_for_archive": 30
+}
